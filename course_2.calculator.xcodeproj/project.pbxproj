@@ -97,10 +97,10 @@
 		F740DA871BBCD434005FECF2 /* course_2.calculator */ = {
 			isa = PBXGroup;
 			children = (
-				F740DA881BBCD434005FECF2 /* AppDelegate.swift */,
 				F740DA8A1BBCD434005FECF2 /* ViewController.swift */,
 				F740DA8C1BBCD434005FECF2 /* Main.storyboard */,
 				F740DA8F1BBCD434005FECF2 /* Assets.xcassets */,
+				F740DA881BBCD434005FECF2 /* AppDelegate.swift */,
 				F740DA911BBCD434005FECF2 /* LaunchScreen.storyboard */,
 				F740DA941BBCD434005FECF2 /* Info.plist */,
 			);
