@@ -11,34 +11,47 @@ import UIKit
 class ViewController: UIViewController {
 
     let brain = CalculatorBrain()
-    @IBOutlet weak var remember: UILabel!
     @IBOutlet weak var result: UITextField!
+    @IBOutlet weak var express: UILabel!
     var stack = Array<Double>()
     var is_middle_type = false
-    var result_value: Double {
+    var result_value: Double? {
         set{
-            result.text = "\(newValue)"
+            if let digit = newValue{
+                result.text = "\(digit)"
+            } else {
+                result.text = " "
+            }
         }
         get{
             return NSNumberFormatter().numberFromString(result.text!)!.doubleValue
         }
     }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        brain.variableValues["π"] = M_PI
+    }
 
     @IBAction func click_operator(sender: UIButton) {
         let m_operator = sender.currentTitle!
         brain.pushOperation(m_operator)
-        if let result = brain.evaluate(){
-            result_value = result
-        }
     }
     
-    @IBAction func click_remember(sender: UIButton) {
-        let m_operator = sender.currentTitle!
-        remember.text! = m_operator
+    @IBAction func click_constant(sender: UIButton) {
+        let constant = sender.currentTitle!
+        brain.pushOperand(constant)
     }
+    
+    @IBAction func ser_m(sender: AnyObject) {
+        brain.variableValues["M"] = result_value
+    }
+    
     @IBAction func enter() {
         is_middle_type = false
-        brain.pushOperand(result_value)
+        if let digit = result_value{
+            brain.pushOperand(digit)
+        }
     }
     
     @IBAction func click_number(sender: UIButton) {
@@ -53,11 +66,19 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func do_it(sender: AnyObject) {
+        express.text! = brain.describe
+        if let result = brain.evaluate(){
+            result_value = result
+        }
+    }
+    
     @IBAction func clear() {
         is_middle_type = false
         result.text! = "0"
         brain.reset()
-        remember.text = "nil"
+        brain.variableValues["M"] = nil
     }
+
 }
 
