@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    let brain = CalculatorBrain()
     @IBOutlet weak var remember: UILabel!
     @IBOutlet weak var result: UITextField!
     var stack = Array<Double>()
@@ -25,19 +26,9 @@ class ViewController: UIViewController {
 
     @IBAction func click_operator(sender: UIButton) {
         let m_operator = sender.currentTitle!
-        switch m_operator{
-            case "+": two_calculate(+)
-            case "−": two_calculate(-)
-            case "×": two_calculate(*)
-            case "÷": two_calculate(/)
-            case "√": one_calculate {sqrt($0)}
-            case "sin": one_calculate {sin($0)}
-            case "cos": one_calculate {cos($0)}
-            case "π":
-                stack.append(M_PI)
-                is_middle_type = false
-                print("\(stack)")
-            default: break
+        brain.pushOperation(m_operator)
+        if let result = brain.evaluate(){
+            result_value = result
         }
     }
     
@@ -47,8 +38,7 @@ class ViewController: UIViewController {
     }
     @IBAction func enter() {
         is_middle_type = false
-        stack.append(result_value)
-        print("\(stack)")
+        brain.pushOperand(result_value)
     }
     
     @IBAction func click_number(sender: UIButton) {
@@ -63,24 +53,10 @@ class ViewController: UIViewController {
         }
     }
     
-    func two_calculate(fun: (Double, Double)->Double){
-        if (stack.count >= 2){
-            result_value = fun(stack.removeLast(), stack.removeLast())
-            enter()
-        }
-    }
-    
-    func one_calculate(fun: Double-> Double){
-        if (stack.count >= 1){
-            result_value = fun(stack.removeLast())
-            enter()
-        }
-    }
-    
     @IBAction func clear() {
         is_middle_type = false
         result.text! = "0"
-        stack.removeAll()
+        brain.reset()
         remember.text = "nil"
     }
 }
